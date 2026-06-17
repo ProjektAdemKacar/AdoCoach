@@ -252,46 +252,48 @@ export async function analyzeFoodImage(
   let lastError: unknown;
 
   for (const model of MODELS) {
-    try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { inlineData: { data: imageBase64, mimeType } },
-              { text: `Analysiere das Essen im Bild. NUR JSON ausgeben:
-{"name":"Name auf Deutsch","calories":350,"protein":25,"carbs":40,"fat":12,"fiber":5,"sugar":8,"details":"Beschreibung, Portionsgröße, Nährstoffe, Bewertung. 2-3 Sätze."}
-Nährwerte in Gramm, Kalorien in kcal. Typische Portion schätzen.` },
-            ],
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { inlineData: { data: imageBase64, mimeType } },
+                { text: `Was ist dieses Essen? Antworte auf Deutsch NUR mit diesem JSON-Format, KEIN anderer Text:
+{"name":"Name","calories":350,"protein":25,"carbs":40,"fat":12,"fiber":5,"sugar":8,"details":"Beschreibung und Bewertung in 2 Sätzen."}` },
+              ],
+            },
+          ],
+          config: {
+            temperature: 0.3,
+            maxOutputTokens: 512,
           },
-        ],
-        config: {
-          temperature: 0.3,
-          maxOutputTokens: 512,
-          responseMimeType: "application/json",
-        },
-      });
+        });
 
-      const text = response.text ?? "";
-      const parsed = safeParse(text);
-      return {
-        name: (parsed.name as string) ?? "Unbekanntes Essen",
-        calories: (parsed.calories as number) ?? 0,
-        protein: (parsed.protein as number) ?? 0,
-        carbs: (parsed.carbs as number) ?? 0,
-        fat: (parsed.fat as number) ?? 0,
-        fiber: (parsed.fiber as number) ?? 0,
-        sugar: (parsed.sugar as number) ?? 0,
-        details: (parsed.details as string) ?? "",
-      };
-    } catch (err: unknown) {
-      lastError = err;
-      const msg = err instanceof Error ? err.message : String(err);
-      const shouldFallback =
-        msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED") ||
-        msg.includes("404") || msg.includes("not found");
-      if (!shouldFallback) throw err;
+        const text = response.text ?? "";
+        const parsed = safeParse(text);
+        return {
+          name: (parsed.name as string) ?? "Unbekanntes Essen",
+          calories: (parsed.calories as number) ?? 0,
+          protein: (parsed.protein as number) ?? 0,
+          carbs: (parsed.carbs as number) ?? 0,
+          fat: (parsed.fat as number) ?? 0,
+          fiber: (parsed.fiber as number) ?? 0,
+          sugar: (parsed.sugar as number) ?? 0,
+          details: (parsed.details as string) ?? "",
+        };
+      } catch (err: unknown) {
+        lastError = err;
+        const msg = err instanceof Error ? err.message : String(err);
+        const isRateLimit = msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED");
+        const isNotFound = msg.includes("404") || msg.includes("not found");
+        const isParseError = msg.includes("JSON") || msg.includes("gültiges");
+        if (isParseError && attempt === 0) continue;
+        if (isRateLimit || isNotFound) break;
+        if (!isParseError) throw err;
+      }
     }
   }
 
