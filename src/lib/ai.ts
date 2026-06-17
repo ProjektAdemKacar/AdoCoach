@@ -10,150 +10,111 @@ const MODELS = [
 ];
 
 function buildSystemPrompt(profile: UserProfile): string {
-  return `Du bist AdoCoach, ein persönlicher KI-LifeCoach. Du sprichst Deutsch und bist motivierend, freundlich und konkret.
-
-PROFIL DES NUTZERS:
-- Name: ${profile.name}
-- Alter: ${profile.age} Jahre
-- Gewicht: ${profile.weight} kg, Größe: ${profile.height} cm
-- Geschlecht: ${profile.gender === "male" ? "Männlich" : profile.gender === "female" ? "Weiblich" : "Divers"}
-- Aufwachzeit: ${profile.wakeUpTime}, Schlafenszeit: ${profile.sleepTime}
-- Fitnesslevel: ${profile.fitnessLevel}
-- Ziele: ${profile.goals.join(", ")}
-
-ERNÄHRUNG:
-- Abneigungen: ${profile.foodPreferences.dislikedFoods.join(", ") || "Keine"}
-- Allergien: ${profile.foodPreferences.allergies.join(", ") || "Keine"}
-- Ernährungsweise: ${profile.foodPreferences.diet}
-
-SPORT:
-- Ort: ${profile.sportPreferences.location === "home" ? "Zuhause" : profile.sportPreferences.location === "gym" ? "Fitnessstudio" : "Draußen"}
-- ${profile.sportPreferences.daysPerWeek}x pro Woche, ${profile.sportPreferences.minutesPerSession} Minuten
-- Bevorzugte Sportarten: ${profile.sportPreferences.preferredTypes.join(", ") || "Keine Präferenz"}
-
-WICHTIGE HINWEISE: ${profile.customNotes || "Keine"}
-
-REGELN:
-- Schlage NIEMALS Lebensmittel vor, die der Nutzer nicht mag oder gegen die er allergisch ist
-- Passe Sportübungen an den Ort und das Fitnesslevel an
-- Berechne Wasseraufnahme basierend auf Gewicht (ca. 35ml pro kg)
-- Plane realistische Zeitfenster zwischen Aufwach- und Schlafenszeit`;
+  return `Du bist AdoCoach, ein KI-LifeCoach. Deutsch, motivierend, konkret.
+NUTZER: ${profile.name}, ${profile.age}J, ${profile.weight}kg/${profile.height}cm, ${profile.gender === "male" ? "M" : profile.gender === "female" ? "W" : "D"}
+ZEITEN: ${profile.wakeUpTime}-${profile.sleepTime}, Fitness: ${profile.fitnessLevel}
+ZIELE: ${profile.goals.join(", ") || "Keine"}
+ESSEN: ${profile.foodPreferences.diet}, Mag nicht: ${profile.foodPreferences.dislikedFoods.join(", ") || "Nichts"}, Allergien: ${profile.foodPreferences.allergies.join(", ") || "Keine"}
+SPORT: ${profile.sportPreferences.location === "home" ? "Zuhause ohne Geräte" : profile.sportPreferences.location === "gym" ? "Gym" : "Outdoor"}, ${profile.sportPreferences.daysPerWeek}x/Woche ${profile.sportPreferences.minutesPerSession}min
+HINWEISE: ${profile.customNotes || "Keine"}
+REGELN: Keine ungemochten Lebensmittel vorschlagen. Sport an Ort/Level anpassen.`;
 }
 
 function buildDailyPlanPrompt(profile: UserProfile): string {
-  const today = format(new Date(), "EEEE, d. MMMM yyyy", { locale: de });
+  const today = format(new Date(), "EEEE, d. MMMM", { locale: de });
   const waterGoal = Math.round(profile.weight * 35);
 
-  return `Erstelle einen kompletten Tagesplan für heute (${today}).
+  return `Tagesplan für ${today}. Antworte NUR mit JSON, KEINE Codeblöcke.
+WICHTIG: Halte die Antwort KURZ. Max 8 Schedule-Items, 4 Meals, 4 Exercises, 8 Shopping-Items. Kurze Beschreibungen (max 10 Wörter).
 
-Antworte AUSSCHLIESSLICH mit validem JSON in diesem exakten Format (keine Markdown-Codeblöcke, kein zusätzlicher Text):
-{
-  "greeting": "Persönliche Morgengrüße mit dem Namen ${profile.name}",
-  "motivationQuote": "Ein motivierender Spruch passend zu den Zielen des Nutzers (1-2 Sätze)",
-  "schedule": [
-    {
-      "id": "s1",
-      "time": "HH:mm",
-      "title": "Aktivität",
-      "description": "Kurze Beschreibung",
-      "category": "routine|meal|sport|hydration|task|rest",
-      "completed": false
-    }
-  ],
-  "meals": [
-    {
-      "id": "m1",
-      "type": "breakfast|lunch|dinner|snack",
-      "name": "Mahlzeit Name",
-      "description": "Beschreibung mit Zubereitung",
-      "calories": 400,
-      "ingredients": ["Zutat 1", "Zutat 2"],
-      "completed": false
-    }
-  ],
-  "waterGoal": ${waterGoal},
-  "workout": {
-    "id": "w1",
-    "name": "Workout Name",
-    "duration": ${profile.sportPreferences.minutesPerSession},
-    "exercises": [
-      {
-        "name": "Übung",
-        "sets": 3,
-        "reps": "10-12",
-        "description": "Ausführung",
-        "completed": false
-      }
-    ],
-    "completed": false
-  },
-  "shoppingList": [
-    {
-      "id": "sh1",
-      "name": "Produkt",
-      "quantity": "Menge",
-      "category": "produce|dairy|meat|grains|snacks|beverages|other",
-      "checked": false
-    }
-  ]
-}
+{"greeting":"Morgengruß für ${profile.name}","motivationQuote":"Motivationsspruch","schedule":[{"id":"s1","time":"HH:mm","title":"...","description":"...","category":"routine","completed":false}],"meals":[{"id":"m1","type":"breakfast","name":"...","description":"...","calories":400,"ingredients":["..."],"completed":false}],"waterGoal":${waterGoal},"workout":{"id":"w1","name":"...","duration":${profile.sportPreferences.minutesPerSession},"exercises":[{"name":"...","sets":3,"reps":"10","description":"...","completed":false}],"completed":false},"shoppingList":[{"id":"sh1","name":"...","quantity":"...","category":"other","checked":false}]}
 
-Wichtig:
-- Plane den Tag von ${profile.wakeUpTime} bis ${profile.sleepTime}
-- Wassererinnerungen alle 1-2 Stunden einplanen
-- 3 Hauptmahlzeiten + 1-2 Snacks
-- Einkaufsliste basierend auf den Mahlzeiten
-- ${profile.sportPreferences.location === "home" ? "Nur Home-Workouts ohne Geräte" : profile.sportPreferences.location === "gym" ? "Gym-Übungen mit Geräten" : "Outdoor-Aktivitäten"}
-- IDs müssen einzigartig sein (s1, s2, ... für schedule; m1, m2, ... für meals; sh1, sh2, ... für shopping)`;
+Tag von ${profile.wakeUpTime} bis ${profile.sleepTime}. 3 Mahlzeiten+1 Snack. Wassererinnerungen. Einzigartige IDs (s1,s2.. m1,m2.. sh1,sh2..).
+category für schedule: routine|meal|sport|hydration|task|rest
+type für meals: breakfast|lunch|dinner|snack
+category für shopping: produce|dairy|meat|grains|snacks|beverages|other`;
 }
 
 function repairJson(raw: string): string {
   let s = raw.trim();
-  // Remove markdown code fences
   s = s.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
-  // Remove trailing commas before } or ]
   s = s.replace(/,\s*([}\]])/g, "$1");
-  // Try to close unclosed brackets/arrays
-  const opens = (s.match(/\{/g) || []).length;
-  const closes = (s.match(/\}/g) || []).length;
-  for (let i = 0; i < opens - closes; i++) s += "}";
-  const openBrackets = (s.match(/\[/g) || []).length;
-  const closeBrackets = (s.match(/\]/g) || []).length;
-  for (let i = 0; i < openBrackets - closeBrackets; i++) s += "]";
+  // Remove incomplete last property (truncated response)
+  s = s.replace(/,\s*"[^"]*":\s*(?:\[(?:[^\]]*)|"[^"]*)?$/, "");
+  s = s.replace(/,\s*\{[^}]*$/, "");
+  // Close unclosed strings
+  const quotes = (s.match(/"/g) || []).length;
+  if (quotes % 2 !== 0) s += '"';
+  // Close brackets
+  const openBrace = (s.match(/\{/g) || []).length;
+  const closeBrace = (s.match(/\}/g) || []).length;
+  const openBracket = (s.match(/\[/g) || []).length;
+  const closeBracket = (s.match(/\]/g) || []).length;
+  for (let i = 0; i < openBracket - closeBracket; i++) s += "]";
+  for (let i = 0; i < openBrace - closeBrace; i++) s += "}";
+  // Fix common issues
+  s = s.replace(/,\s*([}\]])/g, "$1");
   return s;
 }
 
 function safeParse(text: string): Record<string, unknown> {
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  let cleaned = text.trim();
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
-    throw new Error("KI-Antwort enthielt kein gültiges JSON. Bitte erneut versuchen.");
+    throw new Error("KI-Antwort enthielt kein gültiges JSON.");
   }
 
+  // Try direct parse first
   try {
     return JSON.parse(jsonMatch[0]);
   } catch {
-    const repaired = repairJson(jsonMatch[0]);
-    return JSON.parse(repaired);
+    // ignored
   }
+
+  // Try repair
+  try {
+    return JSON.parse(repairJson(jsonMatch[0]));
+  } catch {
+    // ignored
+  }
+
+  // Aggressive: find the largest valid JSON subset
+  let candidate = jsonMatch[0];
+  for (let cutoff = candidate.length; cutoff > 100; cutoff -= 50) {
+    try {
+      const sub = repairJson(candidate.slice(0, cutoff));
+      const result = JSON.parse(sub);
+      if (result && typeof result === "object") return result as Record<string, unknown>;
+    } catch {
+      // keep trying shorter
+    }
+  }
+
+  throw new Error("JSON konnte nicht repariert werden.");
 }
 
 function parseApiError(err: unknown): string {
   const message = err instanceof Error ? err.message : String(err);
 
   if (message.includes("429") || message.includes("RESOURCE_EXHAUSTED") || message.includes("quota")) {
-    return "API-Limit erreicht. Das kostenlose Kontingent ist aufgebraucht. Bitte warte einige Minuten und versuche es erneut, oder prüfe dein Kontingent unter ai.dev/rate-limit";
+    return "API-Limit erreicht. Bitte warte einige Minuten und versuche es erneut.";
   }
   if (message.includes("401") || message.includes("UNAUTHENTICATED") || message.includes("API_KEY_INVALID")) {
     return "Ungültiger API-Key. Bitte prüfe deinen Gemini API Key in den Profil-Einstellungen.";
   }
   if (message.includes("403") || message.includes("PERMISSION_DENIED")) {
-    return "API-Key hat keine Berechtigung. Bitte erstelle einen neuen Key in Google AI Studio.";
+    return "API-Key hat keine Berechtigung. Erstelle einen neuen Key in Google AI Studio.";
   }
   if (message.includes("Failed to fetch") || message.includes("NetworkError") || message.includes("network")) {
-    return "Keine Internetverbindung. Bitte prüfe deine Verbindung und versuche es erneut.";
+    return "Keine Internetverbindung. Bitte prüfe deine Verbindung.";
+  }
+  if (message.includes("JSON") || message.includes("Unexpected") || message.includes("position")) {
+    return "KI-Antwort war fehlerhaft. Bitte erneut versuchen.";
   }
 
-  return `Fehler bei der KI-Anfrage: ${message.slice(0, 200)}`;
+  return `Fehler: ${message.slice(0, 150)}`;
 }
 
 async function callWithFallback(
@@ -172,8 +133,9 @@ async function callWithFallback(
         contents,
         config: {
           systemInstruction,
-          temperature: 0.7,
+          temperature: 0.4,
           maxOutputTokens,
+          responseMimeType: "application/json",
         },
       });
       return response.text ?? "";
@@ -196,7 +158,7 @@ export async function generateDailyPlan(
   profile: UserProfile,
   apiKey: string
 ): Promise<DailyPlan> {
-  const MAX_ATTEMPTS = 2;
+  const MAX_ATTEMPTS = 3;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
@@ -204,7 +166,7 @@ export async function generateDailyPlan(
         apiKey,
         buildDailyPlanPrompt(profile),
         buildSystemPrompt(profile),
-        4096
+        3000
       );
 
       const parsed = safeParse(text);
@@ -214,7 +176,7 @@ export async function generateDailyPlan(
         id: crypto.randomUUID(),
         date: today,
         greeting: (parsed.greeting as string) ?? "Guten Tag!",
-        motivationQuote: (parsed.motivationQuote as string) ?? "Jeder Tag ist eine neue Chance, dein bestes Ich zu sein.",
+        motivationQuote: (parsed.motivationQuote as string) ?? "Jeder Tag ist eine neue Chance.",
         schedule: (parsed.schedule as DailyPlan["schedule"]) ?? [],
         meals: (parsed.meals as DailyPlan["meals"]) ?? [],
         waterGoal: (parsed.waterGoal as number) ?? Math.round(profile.weight * 35),
@@ -225,7 +187,7 @@ export async function generateDailyPlan(
       };
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      const isParseError = msg.includes("JSON") || msg.includes("Unexpected") || msg.includes("position");
+      const isParseError = msg.includes("JSON") || msg.includes("Unexpected") || msg.includes("position") || msg.includes("repariert");
       if (isParseError && attempt < MAX_ATTEMPTS) continue;
       throw new Error(parseApiError(err));
     }
@@ -240,12 +202,31 @@ export async function generateCoachResponse(
   message: string
 ): Promise<string> {
   try {
-    return await callWithFallback(
-      apiKey,
-      message,
-      buildSystemPrompt(profile),
-      1024
-    );
+    const ai = new GoogleGenAI({ apiKey });
+    let lastError: unknown;
+
+    for (const model of MODELS) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: message,
+          config: {
+            systemInstruction: buildSystemPrompt(profile),
+            temperature: 0.7,
+            maxOutputTokens: 1024,
+          },
+        });
+        return response.text ?? "Entschuldigung, ich konnte keine Antwort generieren.";
+      } catch (err: unknown) {
+        lastError = err;
+        const msg = err instanceof Error ? err.message : String(err);
+        const shouldFallback =
+          msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED") ||
+          msg.includes("404") || msg.includes("not found");
+        if (!shouldFallback) throw err;
+      }
+    }
+    throw lastError;
   } catch (err) {
     throw new Error(parseApiError(err));
   }
@@ -278,33 +259,17 @@ export async function analyzeFoodImage(
           {
             role: "user",
             parts: [
-              {
-                inlineData: {
-                  data: imageBase64,
-                  mimeType,
-                },
-              },
-              {
-                text: `Analysiere dieses Essen/Gericht im Bild. Antworte AUSSCHLIESSLICH mit validem JSON (keine Codeblöcke):
-{
-  "name": "Name des Essens auf Deutsch",
-  "calories": 350,
-  "protein": 25,
-  "carbs": 40,
-  "fat": 12,
-  "fiber": 5,
-  "sugar": 8,
-  "details": "Ausführliche Beschreibung: Was ist das Essen, geschätzte Portionsgröße, Vitamine/Mineralstoffe, Gesundheitsbewertung, Tipps. 3-4 Sätze auf Deutsch."
-}
-
-Alle Nährwerte in Gramm (außer Kalorien in kcal). Schätze basierend auf einer typischen Portion.`,
-              },
+              { inlineData: { data: imageBase64, mimeType } },
+              { text: `Analysiere das Essen im Bild. NUR JSON ausgeben:
+{"name":"Name auf Deutsch","calories":350,"protein":25,"carbs":40,"fat":12,"fiber":5,"sugar":8,"details":"Beschreibung, Portionsgröße, Nährstoffe, Bewertung. 2-3 Sätze."}
+Nährwerte in Gramm, Kalorien in kcal. Typische Portion schätzen.` },
             ],
           },
         ],
         config: {
           temperature: 0.3,
-          maxOutputTokens: 1024,
+          maxOutputTokens: 512,
+          responseMimeType: "application/json",
         },
       });
 
