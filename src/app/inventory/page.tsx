@@ -87,14 +87,14 @@ export default function InventoryPage() {
           <h1 className="text-2xl font-bold mt-0.5">Inventar</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="glass border-0 text-sm px-3 py-1">
+          <Badge variant="secondary" className="card-dark border-0 text-sm px-3 py-1">
             {inventory.length} Artikel
           </Badge>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setShowAdd(!showAdd)}
-            className="rounded-full glass h-9 w-9"
+            className="rounded-full card-dark h-9 w-9"
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -102,7 +102,7 @@ export default function InventoryPage() {
       </div>
 
       {/* Search */}
-      <div className="glass rounded-xl p-1.5 flex items-center gap-2 animate-fade-in">
+      <div className="card-dark rounded-xl p-1.5 flex items-center gap-2 animate-fade-in">
         <Search className="h-4 w-4 text-muted-foreground ml-2" />
         <Input
           value={search}
@@ -114,13 +114,13 @@ export default function InventoryPage() {
 
       {/* Add Form */}
       {showAdd && (
-        <div className="glass rounded-2xl p-5 space-y-3 animate-slide-up">
+        <div className="card-dark rounded-xl p-5 space-y-3 animate-slide-up">
           <p className="text-sm font-semibold">Neuer Artikel</p>
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Name (z.B. Reis, Milch...)"
-            className="bg-white/5 border-white/10"
+            className="bg-white/[0.03] border-[#1A2332]"
             onKeyDown={(e) => e.key === "Enter" && handleAdd()}
           />
           <div className="grid grid-cols-3 gap-2">
@@ -131,13 +131,13 @@ export default function InventoryPage() {
                 step="0.5"
                 value={qty}
                 onChange={(e) => setQty(e.target.value)}
-                className="bg-white/5 border-white/10 mt-0.5"
+                className="bg-white/[0.03] border-[#1A2332] mt-0.5"
               />
             </div>
             <div>
               <Label className="text-[10px] text-muted-foreground">Einheit</Label>
               <Select value={unit} onValueChange={(v) => setUnit(v ?? "Stk")}>
-                <SelectTrigger className="bg-white/5 border-white/10 mt-0.5"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-white/[0.03] border-[#1A2332] mt-0.5"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {UNITS.map((u) => <SelectItem key={u} value={u}>{u}</SelectItem>)}
                 </SelectContent>
@@ -146,14 +146,14 @@ export default function InventoryPage() {
             <div>
               <Label className="text-[10px] text-muted-foreground">Kategorie</Label>
               <Select value={category} onValueChange={(v) => setCategory((v ?? "other") as InventoryItem["category"])}>
-                <SelectTrigger className="bg-white/5 border-white/10 mt-0.5"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-white/[0.03] border-[#1A2332] mt-0.5"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {CATEGORIES.map((c) => <SelectItem key={c.value} value={c.value}>{c.emoji} {c.label}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
           </div>
-          <Button onClick={handleAdd} disabled={!name.trim()} className="w-full gradient-primary text-white border-0 rounded-xl">
+          <Button onClick={handleAdd} disabled={!name.trim()} className="w-full gradient-neon text-white border-0 rounded-xl">
             <Plus className="mr-2 h-4 w-4" /> Hinzufügen
           </Button>
         </div>
@@ -168,7 +168,7 @@ export default function InventoryPage() {
               <span>{catInfo?.emoji ?? "📦"}</span>
               {catInfo?.label ?? cat}
             </p>
-            <div className="glass rounded-2xl divide-y divide-white/5">
+            <div className="card-dark rounded-xl divide-y divide-[#1A2332]">
               {items.map((item) => (
                 <div key={item.id} className="flex items-center gap-3 px-4 py-3">
                   <div className="flex-1 min-w-0">
@@ -180,14 +180,14 @@ export default function InventoryPage() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => adjustQty(item.id, -1)}
-                      className="h-7 w-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                      className="h-7 w-7 rounded-lg bg-white/[0.03] flex items-center justify-center hover:bg-white/[0.05] transition-colors"
                     >
                       <Minus className="h-3 w-3" />
                     </button>
                     <span className="text-sm font-mono w-8 text-center">{item.quantity}</span>
                     <button
                       onClick={() => adjustQty(item.id, 1)}
-                      className="h-7 w-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                      className="h-7 w-7 rounded-lg bg-white/[0.03] flex items-center justify-center hover:bg-white/[0.05] transition-colors"
                     >
                       <Plus className="h-3 w-3" />
                     </button>
@@ -207,13 +207,13 @@ export default function InventoryPage() {
 
       {/* Empty */}
       {inventory.length === 0 && !showAdd && (
-        <div className="glass rounded-2xl p-8 text-center animate-fade-in">
+        <div className="card-dark rounded-xl p-8 text-center animate-fade-in">
           <Package className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
           <p className="text-sm font-medium">Noch keine Vorräte</p>
           <p className="text-xs text-muted-foreground mt-1 mb-4">
             Füge Artikel hinzu oder kaufe über die Einkaufsliste ein
           </p>
-          <Button onClick={() => setShowAdd(true)} className="gradient-primary text-white border-0 rounded-xl">
+          <Button onClick={() => setShowAdd(true)} className="gradient-neon text-white border-0 rounded-xl">
             <Plus className="mr-2 h-4 w-4" /> Ersten Artikel hinzufügen
           </Button>
         </div>

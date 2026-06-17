@@ -17,8 +17,8 @@ export default function AchievementsPage() {
       </div>
 
       {/* Summary */}
-      <div className="glass rounded-2xl p-5 text-center animate-slide-up">
-        <div className="inline-flex gradient-primary rounded-2xl p-4 glow-primary mb-3">
+      <div className="card-dark rounded-xl p-5 text-center animate-slide-up">
+        <div className="inline-flex gradient-neon rounded-2xl p-4 glow-neon mb-3">
           <Trophy className="h-8 w-8 text-white" />
         </div>
         <p className="text-3xl font-bold">{unlocked.length} / {achievements.length}</p>
@@ -32,13 +32,13 @@ export default function AchievementsPage() {
             Freigeschaltet
           </p>
           {unlocked.map((a) => (
-            <div key={a.id} className="glass rounded-xl p-4 flex items-center gap-3 glow-sm">
+            <div key={a.id} className="card-dark rounded-xl p-4 flex items-center gap-3 glow-neon-sm">
               <span className="text-3xl">{a.icon}</span>
               <div className="flex-1">
                 <p className="font-semibold">{a.title}</p>
                 <p className="text-xs text-muted-foreground">{a.description}</p>
               </div>
-              <span className="text-[10px] text-primary font-medium">
+              <span className="text-[10px] text-neon font-medium">
                 {new Date(a.unlockedAt!).toLocaleDateString("de-DE", { day: "numeric", month: "short" })}
               </span>
             </div>
@@ -53,7 +53,7 @@ export default function AchievementsPage() {
             Noch gesperrt
           </p>
           {locked.map((a) => (
-            <div key={a.id} className="glass rounded-xl p-4 flex items-center gap-3 opacity-50">
+            <div key={a.id} className="card-dark rounded-xl p-4 flex items-center gap-3 opacity-50">
               <span className="text-3xl grayscale">{a.icon}</span>
               <div className="flex-1">
                 <p className="font-semibold">{a.title}</p>

@@ -39,7 +39,7 @@ export default function ShoppingPage() {
     return (
       <div className="mx-auto max-w-lg px-4 py-6">
         <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
-          <div className="gradient-purple rounded-2xl p-4 glow-sm mb-4">
+          <div className="gradient-purple rounded-2xl p-5 glow-neon-sm mb-4">
             <ShoppingCart className="h-8 w-8 text-white" />
           </div>
           <p className="text-lg font-semibold">Keine Einkaufsliste</p>
@@ -72,13 +72,13 @@ export default function ShoppingPage() {
           <p className="text-sm text-muted-foreground">Einkaufen</p>
           <h1 className="text-2xl font-bold mt-0.5">Einkaufsliste</h1>
         </div>
-        <Badge variant="secondary" className="glass border-0 text-sm px-3 py-1">
+        <Badge variant="secondary" className="card-dark border-0 text-sm px-3 py-1">
           {checkedCount}/{items.length}
         </Badge>
       </div>
 
       {/* Info */}
-      <div className="glass rounded-xl p-3 flex items-center gap-2 text-xs text-muted-foreground animate-fade-in">
+      <div className="card-dark rounded-xl p-3 flex items-center gap-2 text-xs text-muted-foreground animate-fade-in">
         <Package className="h-4 w-4 text-teal-400 shrink-0" />
         <span>Gekaufte Artikel werden automatisch in dein <Link href="/inventory" className="text-primary underline">Inventar</Link> übernommen</span>
       </div>
@@ -90,7 +90,7 @@ export default function ShoppingPage() {
             <span>{categoryEmoji[category] ?? "📦"}</span>
             {categoryLabels[category] ?? category}
           </p>
-          <div className="glass rounded-2xl divide-y divide-white/5">
+          <div className="card-dark rounded-xl divide-y divide-[#1A2332]">
             {categoryItems.map((item) => {
               const inInventory = getInventoryMatch(item.name);
               return (
@@ -100,11 +100,11 @@ export default function ShoppingPage() {
                     onClick={() => item.checked ? toggleShoppingItem(item.id) : handleBuyItem(item.id)}
                   >
                     {item.checked ? (
-                      <div className="shrink-0 rounded-full bg-emerald-500/20 p-1 animate-scale-in">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                      <div className="shrink-0 rounded-full gradient-neon p-1 animate-scale-in">
+                        <CheckCircle2 className="h-4 w-4 text-black" />
                       </div>
                     ) : (
-                      <div className="shrink-0 rounded-full border border-muted-foreground/30 p-1 group-hover:border-primary/50 transition-colors">
+                      <div className="shrink-0 rounded-full border border-[#1A2332] p-1 group-hover:border-neon/40 transition-colors">
                         <Circle className="h-4 w-4 text-muted-foreground" />
                       </div>
                     )}
@@ -128,7 +128,7 @@ export default function ShoppingPage() {
       ))}
 
       {/* Inventory Link */}
-      <Link href="/inventory" className="glass rounded-2xl p-4 flex items-center gap-3 hover:bg-white/5 transition-all animate-slide-up">
+      <Link href="/inventory" className="card-dark rounded-xl p-4 flex items-center gap-3 hover:bg-white/[0.03] transition-all animate-slide-up">
         <div className="rounded-lg bg-teal-500/15 p-2">
           <Package className="h-4 w-4 text-teal-400" />
         </div>

@@ -30,10 +30,10 @@ export function AchievementToast({ achievement, onDone }: AchievementToastProps)
         visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
       }`}
     >
-      <div className="glass-strong rounded-2xl px-5 py-3 flex items-center gap-3 glow-primary shadow-2xl">
+      <div className="card-elevated rounded-2xl px-5 py-3 flex items-center gap-3 glow-neon shadow-2xl">
         <span className="text-3xl animate-bounce">{achievement.icon}</span>
         <div>
-          <p className="text-sm font-bold text-primary">Achievement freigeschaltet!</p>
+          <p className="text-sm font-bold text-neon">Achievement freigeschaltet!</p>
           <p className="text-xs font-semibold">{achievement.title}</p>
           <p className="text-[10px] text-muted-foreground">{achievement.description}</p>
         </div>

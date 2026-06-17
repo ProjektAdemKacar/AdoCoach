@@ -10,6 +10,7 @@ interface CircularProgressProps {
   gradientId?: string;
   colorFrom?: string;
   colorTo?: string;
+  glowColor?: string;
   children?: React.ReactNode;
 }
 
@@ -19,8 +20,9 @@ export function CircularProgress({
   size = 160,
   strokeWidth = 10,
   gradientId = "progress-gradient",
-  colorFrom = "oklch(0.72 0.19 165)",
-  colorTo = "oklch(0.65 0.22 200)",
+  colorFrom = "#00E676",
+  colorTo = "#00C853",
+  glowColor = "rgba(0,230,118,0.4)",
   children,
 }: CircularProgressProps) {
   const [animatedPercent, setAnimatedPercent] = useState(0);
@@ -43,15 +45,26 @@ export function CircularProgress({
             <stop offset="0%" stopColor={colorFrom} />
             <stop offset="100%" stopColor={colorTo} />
           </linearGradient>
+          <filter id={`glow-${gradientId}`}>
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feFlood floodColor={glowColor} result="color" />
+            <feComposite in="color" in2="blur" operator="in" result="glow" />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
+        {/* Track */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="oklch(0.22 0.03 270)"
+          stroke="#1A2332"
           strokeWidth={strokeWidth}
         />
+        {/* Progress */}
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -62,6 +75,7 @@ export function CircularProgress({
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
+          filter={`url(#glow-${gradientId})`}
           style={{ transition: "stroke-dashoffset 1s ease-out" }}
         />
       </svg>

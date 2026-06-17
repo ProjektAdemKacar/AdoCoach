@@ -75,7 +75,7 @@ export default function TrackerPage() {
       </div>
 
       {/* Weight Section */}
-      <div className="glass rounded-2xl p-5 space-y-4 animate-slide-up">
+      <div className="card-dark rounded-xl p-5 space-y-4 animate-slide-up">
         <div className="flex items-center gap-2">
           <div className="rounded-lg bg-teal-500/15 p-2">
             <Scale className="h-4 w-4 text-teal-400" />
@@ -88,7 +88,7 @@ export default function TrackerPage() {
             <span className="text-4xl font-bold">{lastWeight.weight}</span>
             <span className="text-lg text-muted-foreground mb-1">kg</span>
             {weightDiff !== null && weightDiff !== 0 && (
-              <span className={`flex items-center gap-0.5 text-sm mb-1.5 ${weightDiff < 0 ? "text-emerald-400" : "text-red-400"}`}>
+              <span className={`flex items-center gap-0.5 text-sm mb-1.5 ${weightDiff < 0 ? "text-neon" : "text-red-400"}`}>
                 {weightDiff < 0 ? <TrendingDown className="h-3.5 w-3.5" /> : <TrendingUp className="h-3.5 w-3.5" />}
                 {weightDiff > 0 ? "+" : ""}{weightDiff.toFixed(1)}
               </span>
@@ -107,9 +107,9 @@ export default function TrackerPage() {
             value={weightInput}
             onChange={(e) => setWeightInput(e.target.value)}
             placeholder="Gewicht in kg"
-            className="bg-white/5 border-white/10"
+            className="bg-white/[0.03] border-[#1A2332]"
           />
-          <Button onClick={handleAddWeight} className="gradient-primary text-white border-0 shrink-0">
+          <Button onClick={handleAddWeight} className="gradient-neon text-white border-0 shrink-0">
             <Plus className="h-4 w-4" />
           </Button>
         </div>
@@ -127,7 +127,7 @@ export default function TrackerPage() {
       </div>
 
       {/* Sleep Section */}
-      <div className="glass rounded-2xl p-5 space-y-4 animate-slide-up">
+      <div className="card-dark rounded-xl p-5 space-y-4 animate-slide-up">
         <div className="flex items-center gap-2">
           <div className="rounded-lg bg-indigo-500/15 p-2">
             <Moon className="h-4 w-4 text-indigo-400" />
@@ -152,11 +152,11 @@ export default function TrackerPage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-xs text-muted-foreground">Eingeschlafen</Label>
-            <Input type="time" value={bedtime} onChange={(e) => setBedtime(e.target.value)} className="bg-white/5 border-white/10 mt-1" />
+            <Input type="time" value={bedtime} onChange={(e) => setBedtime(e.target.value)} className="bg-white/[0.03] border-[#1A2332] mt-1" />
           </div>
           <div>
             <Label className="text-xs text-muted-foreground">Aufgewacht</Label>
-            <Input type="time" value={wakeTime} onChange={(e) => setWakeTime(e.target.value)} className="bg-white/5 border-white/10 mt-1" />
+            <Input type="time" value={wakeTime} onChange={(e) => setWakeTime(e.target.value)} className="bg-white/[0.03] border-[#1A2332] mt-1" />
           </div>
         </div>
 
@@ -178,7 +178,7 @@ export default function TrackerPage() {
           </div>
         </div>
 
-        <Button onClick={handleAddSleep} className="w-full glass hover:bg-white/5 border-0">
+        <Button onClick={handleAddSleep} className="w-full card-dark hover:bg-white/[0.03] border-0">
           <Minus className="mr-2 h-4 w-4 rotate-90" />
           Schlaf eintragen
         </Button>

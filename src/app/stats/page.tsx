@@ -44,17 +44,17 @@ export default function StatsPage() {
 
       {/* Highlight Cards */}
       <div className="grid grid-cols-3 gap-2 animate-slide-up">
-        <div className="glass rounded-xl p-3 text-center">
+        <div className="card-dark rounded-xl p-3 text-center">
           <Flame className="h-5 w-5 text-orange-400 mx-auto" />
           <p className="text-2xl font-bold mt-1">{streak}</p>
           <p className="text-[10px] text-muted-foreground">Tage Streak</p>
         </div>
-        <div className="glass rounded-xl p-3 text-center">
-          <Dumbbell className="h-5 w-5 text-emerald-400 mx-auto" />
+        <div className="card-dark rounded-xl p-3 text-center">
+          <Dumbbell className="h-5 w-5 text-neon mx-auto" />
           <p className="text-2xl font-bold mt-1">{stats.workoutsCompleted}</p>
           <p className="text-[10px] text-muted-foreground">Workouts</p>
         </div>
-        <div className="glass rounded-xl p-3 text-center">
+        <div className="card-dark rounded-xl p-3 text-center">
           <Trophy className="h-5 w-5 text-yellow-400 mx-auto" />
           <p className="text-2xl font-bold mt-1">{stats.waterGoalsReached}</p>
           <p className="text-[10px] text-muted-foreground">Wasserziele</p>
@@ -62,7 +62,7 @@ export default function StatsPage() {
       </div>
 
       {/* Water Chart */}
-      <div className="glass rounded-2xl p-5 animate-slide-up">
+      <div className="card-dark rounded-xl p-5 animate-slide-up">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Droplets className="h-4 w-4 text-cyan-400" />
@@ -87,7 +87,7 @@ export default function StatsPage() {
       </div>
 
       {/* Calories Chart */}
-      <div className="glass rounded-2xl p-5 animate-slide-up">
+      <div className="card-dark rounded-xl p-5 animate-slide-up">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Flame className="h-4 w-4 text-amber-400" />
@@ -103,7 +103,7 @@ export default function StatsPage() {
 
       {/* Mood Chart */}
       {moodData.length > 0 && (
-        <div className="glass rounded-2xl p-5 animate-slide-up">
+        <div className="card-dark rounded-xl p-5 animate-slide-up">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Moon className="h-4 w-4 text-purple-400" />
@@ -116,7 +116,7 @@ export default function StatsPage() {
 
       {/* Sleep */}
       {sleepData.length > 0 && (
-        <div className="glass rounded-2xl p-5 animate-slide-up">
+        <div className="card-dark rounded-xl p-5 animate-slide-up">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Moon className="h-4 w-4 text-indigo-400" />
@@ -132,7 +132,7 @@ export default function StatsPage() {
 
       {/* Weight */}
       {weightData.length > 0 && (
-        <div className="glass rounded-2xl p-5 animate-slide-up">
+        <div className="card-dark rounded-xl p-5 animate-slide-up">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Scale className="h-4 w-4 text-teal-400" />
@@ -149,7 +149,7 @@ export default function StatsPage() {
 
       {/* Empty State */}
       {dayLogs.length === 0 && (
-        <div className="glass rounded-2xl p-8 text-center animate-fade-in">
+        <div className="card-dark rounded-xl p-8 text-center animate-fade-in">
           <BarChart3 className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
           <p className="text-sm font-medium">Noch keine Statistiken</p>
           <p className="text-xs text-muted-foreground mt-1">

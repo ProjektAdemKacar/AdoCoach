@@ -91,8 +91,8 @@ export default function ScanPage() {
       {/* Camera/Upload Area */}
       {!preview && !result && (
         <div className="animate-slide-up space-y-3">
-          <div className="glass rounded-2xl p-8 flex flex-col items-center text-center">
-            <div className="gradient-food rounded-2xl p-5 glow-sm mb-5">
+          <div className="card-dark rounded-xl p-8 flex flex-col items-center text-center">
+            <div className="gradient-orange rounded-2xl p-5 glow-neon-sm mb-5">
               <Camera className="h-10 w-10 text-white" />
             </div>
             <p className="text-lg font-semibold">Fotografiere dein Essen</p>
@@ -102,14 +102,14 @@ export default function ScanPage() {
             <div className="flex gap-3 w-full">
               <Button
                 onClick={() => cameraRef.current?.click()}
-                className="flex-1 gradient-food text-white border-0 rounded-xl h-12 font-semibold hover:opacity-90 transition-opacity"
+                className="flex-1 gradient-orange text-white border-0 rounded-xl h-12 font-semibold hover:opacity-90 transition-opacity"
               >
                 <Camera className="mr-2 h-5 w-5" /> Kamera
               </Button>
               <Button
                 onClick={() => fileRef.current?.click()}
                 variant="ghost"
-                className="flex-1 glass rounded-xl h-12 font-semibold border-0"
+                className="flex-1 card-dark rounded-xl h-12 font-semibold border-0"
               >
                 <Upload className="mr-2 h-5 w-5" /> Galerie
               </Button>
@@ -136,17 +136,17 @@ export default function ScanPage() {
       {/* Preview */}
       {preview && !result && (
         <div className="animate-slide-up space-y-4">
-          <div className="glass rounded-2xl overflow-hidden">
+          <div className="card-dark rounded-xl overflow-hidden">
             <img src={preview} alt="Food preview" className="w-full h-64 object-cover" />
           </div>
           <div className="flex gap-3">
-            <Button onClick={reset} variant="ghost" className="flex-1 glass border-0 rounded-xl h-11">
+            <Button onClick={reset} variant="ghost" className="flex-1 card-dark border-0 rounded-xl h-11">
               <RotateCcw className="mr-2 h-4 w-4" /> Neu
             </Button>
             <Button
               onClick={analyze}
               disabled={isAnalyzing}
-              className="flex-1 gradient-food text-white border-0 rounded-xl h-11 font-semibold hover:opacity-90 transition-opacity"
+              className="flex-1 gradient-orange text-white border-0 rounded-xl h-11 font-semibold hover:opacity-90 transition-opacity"
             >
               {isAnalyzing ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analysiere...</>
@@ -167,13 +167,13 @@ export default function ScanPage() {
       {result && (
         <div className="space-y-4 animate-slide-up">
           {preview && (
-            <div className="glass rounded-2xl overflow-hidden">
+            <div className="card-dark rounded-xl overflow-hidden">
               <img src={preview} alt={result.name} className="w-full h-48 object-cover" />
             </div>
           )}
 
           {/* Title + Calories */}
-          <div className="glass rounded-2xl p-5">
+          <div className="card-dark rounded-xl p-5">
             <h2 className="text-xl font-bold">{result.name}</h2>
             <div className="flex items-center gap-2 mt-2">
               <Flame className="h-5 w-5 text-amber-400" />
@@ -184,21 +184,21 @@ export default function ScanPage() {
 
           {/* Macros */}
           <div className="grid grid-cols-3 gap-2">
-            <div className="glass rounded-xl p-3 text-center">
+            <div className="card-dark rounded-xl p-3 text-center">
               <CircularProgress value={result.protein} max={totalMacros || 1} size={60} strokeWidth={5} gradientId="protein" colorFrom="oklch(0.65 0.20 25)" colorTo="oklch(0.55 0.22 10)">
                 <Beef className="h-4 w-4 text-red-400" />
               </CircularProgress>
               <p className="text-lg font-bold mt-1">{result.protein}g</p>
               <p className="text-[10px] text-muted-foreground">Protein</p>
             </div>
-            <div className="glass rounded-xl p-3 text-center">
+            <div className="card-dark rounded-xl p-3 text-center">
               <CircularProgress value={result.carbs} max={totalMacros || 1} size={60} strokeWidth={5} gradientId="carbs" colorFrom="oklch(0.75 0.18 55)" colorTo="oklch(0.65 0.20 40)">
                 <Wheat className="h-4 w-4 text-amber-400" />
               </CircularProgress>
               <p className="text-lg font-bold mt-1">{result.carbs}g</p>
               <p className="text-[10px] text-muted-foreground">Kohlenhydrate</p>
             </div>
-            <div className="glass rounded-xl p-3 text-center">
+            <div className="card-dark rounded-xl p-3 text-center">
               <CircularProgress value={result.fat} max={totalMacros || 1} size={60} strokeWidth={5} gradientId="fat" colorFrom="oklch(0.70 0.15 200)" colorTo="oklch(0.60 0.18 220)">
                 <Droplet className="h-4 w-4 text-blue-400" />
               </CircularProgress>
@@ -208,7 +208,7 @@ export default function ScanPage() {
           </div>
 
           {/* More Nutrients */}
-          <div className="glass rounded-2xl p-4">
+          <div className="card-dark rounded-xl p-4">
             <div className="flex items-center justify-between py-2">
               <span className="flex items-center gap-2 text-sm"><Leaf className="h-4 w-4 text-green-400" /> Ballaststoffe</span>
               <span className="font-medium">{result.fiber}g</span>
@@ -221,11 +221,11 @@ export default function ScanPage() {
           </div>
 
           {/* Details */}
-          <div className="glass rounded-2xl p-4">
+          <div className="card-dark rounded-xl p-4">
             <p className="text-sm leading-relaxed text-muted-foreground">{result.details}</p>
           </div>
 
-          <Button onClick={reset} className="w-full glass border-0 rounded-xl h-11 hover:bg-white/5">
+          <Button onClick={reset} className="w-full card-dark border-0 rounded-xl h-11 hover:bg-white/[0.03]">
             <Camera className="mr-2 h-4 w-4" /> Neues Foto analysieren
           </Button>
         </div>
@@ -243,7 +243,7 @@ export default function ScanPage() {
             {showHistory ? <ChevronUp className="h-3 w-3 ml-auto" /> : <ChevronDown className="h-3 w-3 ml-auto" />}
           </button>
           {showHistory && (
-            <div className="glass rounded-2xl divide-y divide-white/5">
+            <div className="card-dark rounded-xl divide-y divide-[#1A2332]">
               {[...foodScans].reverse().slice(0, 10).map((scan) => (
                 <div key={scan.id} className="px-4 py-3 flex items-center justify-between">
                   <div>

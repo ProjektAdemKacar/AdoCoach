@@ -59,7 +59,7 @@ export function ReflectionModal({ open, onClose }: ReflectionModalProps) {
   return (
     <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center animate-fade-in">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-md mx-4 mb-4 sm:mb-0 glass-strong rounded-2xl p-6 animate-slide-up">
+      <div className="relative w-full max-w-md mx-4 mb-4 sm:mb-0 card-elevated rounded-2xl p-6 animate-slide-up">
         <button onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X className="h-5 w-5" />
         </button>
@@ -98,15 +98,15 @@ export function ReflectionModal({ open, onClose }: ReflectionModalProps) {
 
               {/* Stats */}
               <div className="flex gap-3">
-                <div className="flex-1 rounded-xl bg-white/5 p-3 text-center">
+                <div className="flex-1 rounded-xl bg-white/[0.03] p-3 text-center">
                   <p className="text-2xl font-bold">{tasksCompleted}/{tasksTotal}</p>
                   <p className="text-[10px] text-muted-foreground">Aufgaben</p>
                 </div>
-                <div className="flex-1 rounded-xl bg-white/5 p-3 text-center">
+                <div className="flex-1 rounded-xl bg-white/[0.03] p-3 text-center">
                   <p className="text-2xl font-bold">{Math.round(((dailyPlan?.waterConsumed ?? 0) / (dailyPlan?.waterGoal ?? 2500)) * 100)}%</p>
                   <p className="text-[10px] text-muted-foreground">Wasser</p>
                 </div>
-                <div className="flex-1 rounded-xl bg-white/5 p-3 text-center">
+                <div className="flex-1 rounded-xl bg-white/[0.03] p-3 text-center">
                   <p className="text-2xl font-bold">{dailyPlan?.workout?.completed ? "✓" : "✗"}</p>
                   <p className="text-[10px] text-muted-foreground">Workout</p>
                 </div>
@@ -119,7 +119,7 @@ export function ReflectionModal({ open, onClose }: ReflectionModalProps) {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder="Was lief gut? Was möchtest du morgen besser machen?"
-                  className="bg-white/5 border-white/10 resize-none"
+                  className="bg-white/[0.03] border-[#1A2332] resize-none"
                   rows={3}
                 />
               </div>
